@@ -6,6 +6,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/src")
 add_definitions(
     -DV8_COMPRESS_POINTERS
     -DV8_REVERSE_JSARGS
+    -DX86_64
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/emulators/native/libzip/libzip.cmake")
