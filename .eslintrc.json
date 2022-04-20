@@ -1,0 +1,35 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "google"
+    ],
+    "rules": {
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "require-jsdoc": "off",
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1,
+                "FunctionDeclaration": {
+                    "parameters": "first"
+                }
+            }
+        ],
+        "max-len": [
+            "error",
+            120
+        ]
+    },
+    "ignorePatterns": ["dist/**/*"]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "dos.zone.browser.pc",
+  "version": "1.0.0",
+  "description": "DOS Zone Browser with hardware acceleration",
+  "main": "src/index.js",
+  "repository": "git@github.com:js-dos/dos.zone.browser.pc.git",
+  "author": "Alexander Guryanov <caiiiycuk@gmail.com>",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+      "dev": "cmake-js compile && electron ."
+  },
+  "devDependencies": {
+    "cmake-js": "^6.3.0",
+    "electron": "13.6.9",
+    "eslint": "^8.13.0",
+    "eslint-config-google": "^0.14.0",
+    "node-addon-api": "^4.3.0"
+  },
+  "cmake-js": {
+    "runtime": "electron",
+    "runtimeVersion": "13.6.9",
+    "arch": "x64"
+  },
+  "dependencies": {}
+}
