@@ -4,6 +4,7 @@ const { isValidFs, getDataPath } = require("./fs");
 const { ipcRenderer } = require("electron");
 
 let impl = null;
+let sessionId = "";
 
 if (!process.isMainFrame && isValidFs()) {
     let fd = null;
@@ -50,7 +51,8 @@ if (!process.isMainFrame && isValidFs()) {
         sendMessage: (payload /* : string*/) => {
             if (impl === null) {
                 impl = require("./emulators.node");
-                impl.registerServerMessage(serverMessageWrapper);
+                impl.registerCallbacks(serverMessageCallback, soundPushCallback);
+                sessionId = payload.split("\n")[1].trim();
             }
 
             impl.sendMessage(payload);
@@ -93,7 +95,7 @@ if (!process.isMainFrame && isValidFs()) {
     };
 
 
-    function serverMessageWrapper(message) {
+    function serverMessageCallback(message) {
         if (message.indexOf("ws-persist") >= 0) {
             const size = impl.getChangesSize();
             const changes = new ArrayBuffer(size);
@@ -115,5 +117,14 @@ if (!process.isMainFrame && isValidFs()) {
         const encoded = Buffer.from(message).toString("base64");
         window.serverMessage(encoded);
     };
+
+    function soundPushCallback(samples) {
+        const payload = {
+            name: "ws-sound-push",
+            samples: new Float32Array(samples),
+            sessionId,
+        };
+        window.serverMessage(payload);
+    }
 }
 

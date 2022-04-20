@@ -38,6 +38,7 @@ public:
 };
 
 Napi::ThreadSafeFunction serverMessage;
+Napi::ThreadSafeFunction soundPush;
 
 std::string sessionId = "";
 const std::string baseDir = "data";
@@ -54,6 +55,11 @@ std::mutex changesMutex;
 std::atomic_bool postChanges(false);
 int changesLength = 0;
 char* changesData = nullptr;
+
+std::mutex soundMutex;
+constexpr int soundBufferSize = 4096 * 4;
+int soundBufferUsed = 0;
+float soundBuffer[soundBufferSize];
 
 std::mutex networkMutex;
 std::atomic_bool networkChanges(false);
@@ -131,17 +137,34 @@ void client_frame_update_lines(uint32_t* lines, uint32_t batchCount, void* rgba)
 }
 
 void client_sound_init(int freq) {
-    // TODO
     jsonstream stream;
     stream
             << "sessionId" << sessionId
             << "name" << "ws-sound-init"
-            << "freq" << 0; // turn off web audio
+            << "freq" << freq;
     postMessage(stream);
 }
 
 void client_sound_push(const float* samples, int num_samples) {
-    // TODO
+    std::lock_guard<std::mutex> g(soundMutex);
+    if (num_samples > soundBufferSize - soundBufferUsed) {
+        return;
+    }
+
+    memcpy(soundBuffer + soundBufferUsed, samples, num_samples * sizeof(float));
+    soundBufferUsed += num_samples;
+
+    soundPush.NonBlockingCall([](Napi::Env env, Napi::Function jsCallback) {
+        std::lock_guard<std::mutex> g(soundMutex);
+        if (soundBufferUsed == 0) {
+            return;
+        }
+
+        auto samples = Napi::ArrayBuffer::New(env, soundBufferUsed * sizeof(float));
+        memcpy(samples.Data(), soundBuffer, soundBufferUsed * sizeof(float));
+        jsCallback.Call({samples});
+        soundBufferUsed = 0;
+    });
 }
 
 void client_stdout(const char* data, uint32_t amount) {
@@ -551,13 +574,24 @@ void server_loop() {
     }
 }
 
-void registerServerMessage(const Napi::CallbackInfo &info) {
+void registerCallbacks(const Napi::CallbackInfo &info) {
     Napi::Env env = info.Env();
   
     serverMessage = Napi::ThreadSafeFunction::New(
         env,
         info[0].As<Napi::Function>(), // JavaScript function called asynchronously
         "serverMessage",              // Name
+        0,                            // Unlimited queue
+        1,                            // Only one thread will use this initially
+        []( Napi::Env ) {             // Finalizer used to clean threads up
+            nativeThread.join();
+        }
+    );
+    
+    soundPush = Napi::ThreadSafeFunction::New(
+        env,
+        info[1].As<Napi::Function>(), // JavaScript function called asynchronously
+        "soundPush",                  // Name
         0,                            // Unlimited queue
         1,                            // Only one thread will use this initially
         []( Napi::Env ) {             // Finalizer used to clean threads up
@@ -577,7 +611,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseButton", Napi::Function::New(env, mouseButton));
   exports.Set("getChangesSize", Napi::Function::New(env, getChangesSize));
   exports.Set("getChanges", Napi::Function::New(env, getChanges));
-  exports.Set("registerServerMessage", Napi::Function::New(env, registerServerMessage));
+  exports.Set("registerCallbacks", Napi::Function::New(env, registerCallbacks));
   return exports;
 }
 
