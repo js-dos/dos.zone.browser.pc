@@ -31,6 +31,7 @@ function setupHardware() {
     let frameWidth = 0;
     let frameHeight = 0;
     let framePayload = new ArrayBuffer(0);
+
     window.hardware = {
         file: null,
         readConfig: () => {
@@ -144,6 +145,16 @@ function setupHardware() {
         };
         window.serverMessage(payload);
     }
+
+    addEventListener("keyup", (ev) => {
+        if (ev.key !== "Escape") {
+            return;
+        }
+
+        if (document.pointerLockElement !== null) {
+            document.exitPointerLock();
+        }
+    }, { capture: true });
 }
 
 setupHardware();
