@@ -5,16 +5,21 @@ const createWindow = () => {
     const window = new BrowserWindow({
         title: "DOS.Zone Browser (With hardware acceleration)",
         webPreferences: {
-            preload: path.join(__dirname, "hardware.js"),
+            preload: path.join(__dirname, "preload.js"),
             nodeIntegrationInSubFrames: true,
             contextIsolation: false,
             backgroundThrottling: false,
         },
     });
-    window.removeMenu();
+
     window.webContents.setWindowOpenHandler(({ url }) => {
-        if (url.startsWith("https://dos.zone/studio")) {
+        if (url.startsWith("https://dos.zone/studio") ||
+            url.startsWith("https://talks.dos.zone")) {
             window.loadURL(url);
+        } else if (url.startsWith("https://accounts.google.com/o/oauth2")) {
+            return {
+                action: "allow",
+            };
         } else if (url && url.length > 0) {
             shell.openExternal(url);
         }
@@ -22,6 +27,7 @@ const createWindow = () => {
             action: "deny",
         };
     });
+
     // window.loadURL("https://dos.zone/the-need-for-speed-sep-1995/");
     window.loadURL("https://dos.zone/dangerous-dave-in-the-haunted-mansion-1991/");
 
@@ -38,10 +44,19 @@ const createWindow = () => {
     }
 
     process.on("uncaughtException", onError);
+
+    app.on("browser-window-created", (event, newWindow) => {
+        if (window !== newWindow) {
+            newWindow.on("closed", () => {
+                window.reload();
+            });
+        }
+    });
 };
 
 app.whenReady().then(() => {
     app.allowRendererProcessReuse = false;
+    app.applicationMenu = null;
     createWindow();
 });
 

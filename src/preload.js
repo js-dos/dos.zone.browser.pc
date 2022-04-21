@@ -1,7 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const { prepareFs, getDataPath } = require("./fs");
+const { renderNavbar } = require("./navbar");
 const { ipcRenderer } = require("electron");
+
+function setupNavbar() {
+    if (process.isMainFrame) {
+        renderNavbar(document);
+    }
+}
 
 function setupHardware() {
     const isPlayerLocation = location.pathname.startsWith("/player/");
@@ -157,4 +164,5 @@ function setupHardware() {
     }, { capture: true });
 }
 
+setupNavbar();
 setupHardware();
