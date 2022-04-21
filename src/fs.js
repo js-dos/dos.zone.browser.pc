@@ -15,12 +15,10 @@ function showAlertOnErrorOnce() {
     showAlertOnError = false;
 }
 
-function isValidFs() {
+function prepareFs() {
     process.chdir(root);
     try {
-        if (fs.existsSync(data)) {
-            rmdirSync(data);
-        }
+        fs.rmSync(data, { force: true, recursive: true, maxRetries: 5 });
     } catch (e) {
         console.error(e);
         showAlertOnErrorOnce();
@@ -42,22 +40,5 @@ function getDataPath(name) {
     return path.join(data, name);
 };
 
-function rmdirSync(directory) {
-    let files = [];
-    if (fs.existsSync(directory)) {
-        files = fs.readdirSync(directory);
-        files.forEach(function(file, index) {
-            const current = path.join(directory, file);
-            if (fs.lstatSync(current).isDirectory()) {
-                rmdirSync(current);
-            } else {
-                fs.unlinkSync(current);
-            }
-        });
-        fs.rmdirSync(directory);
-    }
-};
-
-
-module.exports.isValidFs = isValidFs;
+module.exports.prepareFs = prepareFs;
 module.exports.getDataPath = getDataPath;

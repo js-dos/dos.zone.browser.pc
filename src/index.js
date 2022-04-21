@@ -8,6 +8,7 @@ const createWindow = () => {
             preload: path.join(__dirname, "hardware.js"),
             nodeIntegrationInSubFrames: true,
             contextIsolation: false,
+            backgroundThrottling: false,
         },
     });
     window.removeMenu();
@@ -21,9 +22,11 @@ const createWindow = () => {
             action: "deny",
         };
     });
-    window.loadURL("https://dos.zone/the-need-for-speed-sep-1995/");
+    // window.loadURL("https://dos.zone/the-need-for-speed-sep-1995/");
+    window.loadURL("https://dos.zone/dangerous-dave-in-the-haunted-mansion-1991/");
 
-    // window.webContents.openDevTools({ mode: "left" });
+
+    window.webContents.openDevTools({ mode: "left" });
 
     ipcMain.on("reload", () => {
         window.reload();

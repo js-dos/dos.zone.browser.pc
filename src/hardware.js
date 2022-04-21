@@ -1,12 +1,32 @@
 const fs = require("fs");
 const path = require("path");
-const { isValidFs, getDataPath } = require("./fs");
+const { prepareFs, getDataPath } = require("./fs");
 const { ipcRenderer } = require("electron");
 
-let impl = null;
-let sessionId = "";
+function setupHardware() {
+    const isPlayerLocation = location.pathname.startsWith("/player/");
+    if (process.isMainFrame || !isPlayerLocation) {
+        return;
+    }
 
-if (!process.isMainFrame && isValidFs()) {
+    const fsReady = prepareFs();
+    if (!fsReady) {
+        return;
+    }
+
+    let impl = null;
+    try {
+        impl = require("./emulators.node");
+        impl.registerCallbacks(serverMessageCallback, soundPushCallback);
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (impl === null) {
+        return;
+    }
+
+    let sessionId = "";
     let fd = null;
     let frameWidth = 0;
     let frameHeight = 0;
@@ -49,9 +69,7 @@ if (!process.isMainFrame && isValidFs()) {
             impl.mouseButton(button, pressed, timeMs);
         },
         sendMessage: (payload /* : string*/) => {
-            if (impl === null) {
-                impl = require("./emulators.node");
-                impl.registerCallbacks(serverMessageCallback, soundPushCallback);
+            if (sessionId === "") {
                 sessionId = payload.split("\n")[1].trim();
             }
 
@@ -103,13 +121,13 @@ if (!process.isMainFrame && isValidFs()) {
             const encoded = Buffer.from(changes, 0, size).toString("base64");
             message += "\"bundle\":\"" + encoded + "\",";
         } else if (message.indexOf("ws-stdout") >= 0 || message.indexOf("ws-log") >= 0 ||
-                message.indexOf("ws-warn") >=0 || message.indexOf("ws-err") >= 0) {
+            message.indexOf("ws-warn") >= 0 || message.indexOf("ws-err") >= 0) {
             const contentsStart = message.indexOf("message\":\"") + "message\":\"".length;
             const contentsEnd = message.length - "\",".length;
             const contents = message.substring(contentsStart, contentsEnd);
             message = message.substring(0, contentsStart) +
-                        Buffer.from(contents).toString("base64") +
-                        message.substring(contentsEnd);
+                Buffer.from(contents).toString("base64") +
+                message.substring(contentsEnd);
         } else if (message.indexOf("ws-exit") >= 0) {
             ipcRenderer.send("reload");
         }
@@ -128,3 +146,4 @@ if (!process.isMainFrame && isValidFs()) {
     }
 }
 
+setupHardware();

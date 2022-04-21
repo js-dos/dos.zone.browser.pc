@@ -17,6 +17,9 @@
 #include <thread>
 #include <vector>
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 class jsonstream {
     bool keyNext;
     std::string contents;
@@ -57,9 +60,11 @@ int changesLength = 0;
 char* changesData = nullptr;
 
 std::mutex soundMutex;
-constexpr int soundBufferSize = 4096 * 4;
-int soundBufferUsed = 0;
+constexpr int32_t soundBufferSize = 4096 * 4;
+int32_t soundBufferUsed = 0;
 float soundBuffer[soundBufferSize];
+ma_device device;
+bool useWebAudio = false;
 
 std::mutex networkMutex;
 std::atomic_bool networkChanges(false);
@@ -136,12 +141,57 @@ void client_frame_update_lines(uint32_t* lines, uint32_t batchCount, void* rgba)
     }
 }
 
+void ma_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 numFrames) {
+    std::lock_guard<std::mutex> g(soundMutex);
+
+    static bool started = false;
+    if (!started) {
+        if (soundBufferUsed < soundBufferSize / 4) {
+            return;
+        }
+
+        started = true;
+    }
+
+    int32_t copySize = std::min((int32_t) numFrames, soundBufferUsed);
+    memcpy(pOutput, soundBuffer, copySize * 4);
+
+    if (copySize < soundBufferUsed) {
+        auto rest = soundBufferUsed - copySize;
+        memmove(soundBuffer, soundBuffer + copySize, rest * 4);
+        soundBufferUsed = rest;
+    } else {
+        soundBufferUsed = 0;
+    }
+}
+
 void client_sound_init(int freq) {
+    ma_device_config config  = ma_device_config_init(ma_device_type_playback);
+    config.playback.format   = ma_format_f32; 
+    config.playback.channels = 1;             
+    config.sampleRate        = freq;          
+    config.dataCallback      = ma_callback;  
+
+    if (ma_device_init(NULL, &config, &device) != MA_SUCCESS) {
+        printf("-- unable to start mini audio, fallback to web audio --\n");
+        useWebAudio = true;
+        jsonstream stream;
+        stream
+            << "sessionId" << sessionId
+            << "name" << "ws-sound-init"
+            << "freq" << freq;
+        postMessage(stream);
+        return;
+    }
+
+    ma_device_start(&device);
+    printf("-- miniaudio started --\n");
+
     jsonstream stream;
     stream
             << "sessionId" << sessionId
             << "name" << "ws-sound-init"
-            << "freq" << freq;
+            << "freq" << 0; // turn off web audio
     postMessage(stream);
 }
 
@@ -153,6 +203,10 @@ void client_sound_push(const float* samples, int num_samples) {
 
     memcpy(soundBuffer + soundBufferUsed, samples, num_samples * sizeof(float));
     soundBufferUsed += num_samples;
+
+    if (!useWebAudio) {
+        return;
+    }
 
     soundPush.NonBlockingCall([](Napi::Env env, Napi::Function jsCallback) {
         std::lock_guard<std::mutex> g(soundMutex);
@@ -311,7 +365,9 @@ void sendMessage(const Napi::CallbackInfo& info) {
             postMessage(stream);
         
             server_run();
-
+            if (!useWebAudio) {
+                ma_device_uninit(&device); 
+            }
             {
                 jsonstream exit;
                 exit
