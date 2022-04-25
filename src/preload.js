@@ -11,6 +11,7 @@ function setupNavbar() {
 }
 
 function setupHardware() {
+    let doNotPreventUnload = false;
     const isPlayerLocation = location.pathname.startsWith("/player/");
     if (process.isMainFrame || !isPlayerLocation) {
         return;
@@ -41,6 +42,7 @@ function setupHardware() {
 
     window.hardware = {
         file: null,
+        preventUnload: false,
         readConfig: () => {
             try {
                 const config = fs.readFileSync(path.join(".jsdos", "jsdos.json"), "utf8");
@@ -137,6 +139,7 @@ function setupHardware() {
                 Buffer.from(contents).toString("base64") +
                 message.substring(contentsEnd);
         } else if (message.indexOf("ws-exit") >= 0) {
+            doNotPreventUnload = true;
             ipcRenderer.send("reload");
         }
 
@@ -162,6 +165,21 @@ function setupHardware() {
             document.exitPointerLock();
         }
     }, { capture: true });
+
+    addEventListener("beforeunload", (e) => {
+        if (doNotPreventUnload) {
+            return;
+        }
+
+        if (dos) {
+            const fn = () => {
+                doNotPreventUnload = true;
+                ipcRenderer.send("reload");
+            };
+            dos.layers.save().then(fn).catch(fn);
+            e.returnValue = "";
+        }
+    });
 }
 
 setupNavbar();

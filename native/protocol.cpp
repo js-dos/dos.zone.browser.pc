@@ -345,7 +345,19 @@ void sendMessage(const Napi::CallbackInfo& info) {
             chdir(baseDir.c_str());
 
             if (exists("bundle_0.zip")) {
+                zip_set_on_progress([](const char* file, int extracted, int total) {
+                    jsonstream progress;
+                    progress
+                        << "name" << "ws-extract-progress"
+                        << "index" << 0
+                        << "file" << file
+                        << "extracted" << extracted
+                        << "count" << total
+                        << "sessionId" << sessionId;
+                    postMessage(progress);
+                });
                 zipfile_to_fs("bundle_0.zip");
+                zip_set_on_progress(nullptr);
                 remove("bundle_0.zip");
             }
 
