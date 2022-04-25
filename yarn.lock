@@ -175,16 +175,6 @@
   optionalDependencies:
     electron-winstaller "^5.0.0"
 
-"@electron-forge/maker-zip@^6.0.0-beta.63":
-  version "6.0.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-zip/-/maker-zip-6.0.0-beta.63.tgz#f4b918e1933104a2dccf3ef4cd93beb8c1f4ce6c"
-  integrity sha512-tXNX58ly2TYj0Z7G9bKP3FbEHLfeNv+lJgmlDBwP5Uh4yG0d/dxIBUzP5Dv+pIjsH/l3K3dVfCCM3fc4q+u3Mg==
-  dependencies:
-    "@electron-forge/maker-base" "6.0.0-beta.63"
-    "@electron-forge/shared-types" "6.0.0-beta.63"
-    cross-zip "^4.0.0"
-    fs-extra "^10.0.0"
-
 "@electron-forge/plugin-base@6.0.0-beta.63":
   version "6.0.0-beta.63"
   resolved "https://registry.yarnpkg.com/@electron-forge/plugin-base/-/plugin-base-6.0.0-beta.63.tgz#4895d846d5c643296db9892af2a74238bc8637d7"
@@ -1054,13 +1044,6 @@ console-control-strings@^1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-copy-to-clipboard@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.1.tgz#115aa1a9998ffab6196f93076ad6da3b913662ae"
-  integrity sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==
-  dependencies:
-    toggle-selection "^1.0.6"
-
 core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -1099,11 +1082,6 @@ cross-spawn@^7.0.1, cross-spawn@^7.0.2:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
-
-cross-zip@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cross-zip/-/cross-zip-4.0.0.tgz#c29bfb2c001659a6d480ae9596f3bee83b48a230"
-  integrity sha512-MEzGfZo0rqE10O/B+AEcCSJLZsrWuRUvmqJTqHNqBtALhaJc3E3ixLGLJNTRzEA2K34wbmOHC4fwYs9sVsdcCA==
 
 cuint@^0.2.2:
   version "0.2.2"
@@ -3985,11 +3963,6 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
-
-toggle-selection@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
-  integrity sha1-bkWxJj8gF/oKzH2J14sVuL932jI=
 
 tough-cookie@~2.5.0:
   version "2.5.0"

@@ -1,68 +1,68 @@
 {
-  "name": "dos.zone.browser.pc",
-  "version": "1.0.0",
-  "description": "DOS Zone Browser with hardware acceleration",
-  "main": "src/index.js",
-  "repository": "git@github.com:js-dos/dos.zone.browser.pc.git",
-  "author": "Alexander Guryanov <caiiiycuk@gmail.com>",
-  "license": "GPL-3.0",
-  "private": true,
-  "scripts": {
-    "dev": "cmake-js compile && electron .",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-deb"
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.63",
-    "@electron-forge/maker-deb": "^6.0.0-beta.63",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
-    "@electron-forge/maker-zip": "^6.0.0-beta.63",
-    "cmake-js": "^6.3.0",
-    "electron": "13.6.9",
-    "eslint": "^8.14.0",
-    "eslint-config-google": "^0.14.0",
-    "node-addon-api": "^4.3.0"
-  },
-  "cmake-js": {
-    "runtime": "electron",
-    "runtimeVersion": "13.6.9",
-    "arch": "x64"
-  },
-  "dependencies": {
-    "copy-to-clipboard": "^3.3.1",
-    "electron-squirrel-startup": "^1.0.0"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-          "ignore": ".vscode|data|emulators|native|src|\\.*"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "dos.zone.browser.pc"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "name": "dos.zone.browser.pc",
-            "productName": "DOS Zone Browser",
-            "categories": ["Game"],
-            "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
-            "section": "games",
-            "maintainer": "Alexander Guryanov <caiiiycuk@gmail.com>",
-            "homepage": "https://dos.zone/"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+    "name": "dos.zone.browser.pc",
+    "version": "1.0.0",
+    "description": "DOS Zone Browser with hardware acceleration",
+    "main": "src/index.js",
+    "repository": "git@github.com:js-dos/dos.zone.browser.pc.git",
+    "author": "Alexander Guryanov <caiiiycuk@gmail.com>",
+    "license": "GPL-3.0",
+    "private": true,
+    "scripts": {
+        "dev": "cmake-js compile && electron .",
+        "start": "electron-forge start",
+        "package": "electron-forge package",
+        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-zip"
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^6.0.0-beta.63",
+        "@electron-forge/maker-deb": "^6.0.0-beta.63",
+        "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+        "cmake-js": "^6.3.0",
+        "electron": "13.6.9",
+        "eslint": "^8.14.0",
+        "eslint-config-google": "^0.14.0",
+        "node-addon-api": "^4.3.0"
+    },
+    "cmake-js": {
+        "runtime": "electron",
+        "runtimeVersion": "13.6.9",
+        "arch": "x64"
+    },
+    "dependencies": {
+        "electron-squirrel-startup": "^1.0.0"
+    },
+    "config": {
+        "forge": {
+            "packagerConfig": {
+                "ignore": "(.vscode|build|node_modules|data|emulators|native|.eslintrc.json|.gitignore|.gitmodules|CMakeLists.txt|yarn.lock|README.md)$"
+            },
+            "makers": [
+                {
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "dos.zone.browser.pc"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {
+                        "name": "dos.zone.browser.pc",
+                        "productName": "DOS Zone Browser",
+                        "categories": [
+                            "Game"
+                        ],
+                        "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
+                        "section": "games",
+                        "maintainer": "Alexander Guryanov <caiiiycuk@gmail.com>",
+                        "homepage": "https://dos.zone/"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                }
+            ]
         }
-      ]
     }
-  }
 }

@@ -1,5 +1,4 @@
 const { ipcRenderer } = require("electron");
-const copy = require("copy-to-clipboard");
 
 module.exports.renderNavbar = function(document) {
     document.addEventListener("DOMContentLoaded", function() {
@@ -18,7 +17,7 @@ module.exports.renderNavbar = function(document) {
             ipcRenderer.send("reload");
         });
         container.querySelector(".e-copy").addEventListener("click", () => {
-            copy(location.href);
+            navigator.clipboard.writeText(location.href);
         });
 
         const head = document.head;
