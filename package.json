@@ -11,7 +11,7 @@
         "dev": "cmake-js compile && electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
-        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-zip"
+        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-deb"
     },
     "devDependencies": {
         "@electron-forge/cli": "^6.0.0-beta.63",
@@ -41,13 +41,13 @@
                 {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
-                        "name": "dos.zone.browser.pc"
+                        "name": "dos.zone.browser"
                     }
                 },
                 {
                     "name": "@electron-forge/maker-deb",
                     "config": {
-                        "name": "dos.zone.browser.pc",
+                        "name": "dos.zone.browser",
                         "productName": "DOS Zone Browser",
                         "categories": [
                             "Game"

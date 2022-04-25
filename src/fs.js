@@ -1,6 +1,8 @@
 const fs = require("fs");
+const os = require("os");
+
 const path = require("path");
-const root = path.join(__dirname, "..");
+const root = os.tmpdir();
 const data = "data";
 
 let showAlertOnError = true;

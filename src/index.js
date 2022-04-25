@@ -4,6 +4,9 @@ const path = require("path");
 const createWindow = () => {
     const window = new BrowserWindow({
         title: "DOS.Zone Browser (With hardware acceleration)",
+        icon: process.platform === "darwin" || process.platform === "win32" ?
+            undefined :
+            path.join(__dirname, "icon.png"),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegrationInSubFrames: true,
