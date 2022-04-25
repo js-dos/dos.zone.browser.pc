@@ -11,7 +11,7 @@
         "dev": "cmake-js compile && electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
-        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-deb"
+        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-rpm,@electron-forge/maker-deb"
     },
     "devDependencies": {
         "@electron-forge/cli": "^6.0.0-beta.63",
@@ -35,7 +35,8 @@
     "config": {
         "forge": {
             "packagerConfig": {
-                "ignore": "(.vscode|build|node_modules|data|emulators|native|.eslintrc.json|.gitignore|.gitmodules|CMakeLists.txt|yarn.lock|README.md)$"
+                "ignore": "(.vscode|build|node_modules|data|emulators|native|.eslintrc.json|.gitignore|.gitmodules|CMakeLists.txt|yarn.lock|README.md)$",
+                "icon": "./src/icon"
             },
             "makers": [
                 {
@@ -49,6 +50,7 @@
                     "config": {
                         "name": "dos.zone.browser",
                         "productName": "DOS Zone Browser",
+                        "icon": "./src/icon.png",
                         "categories": [
                             "Game"
                         ],
@@ -60,7 +62,18 @@
                 },
                 {
                     "name": "@electron-forge/maker-rpm",
-                    "config": {}
+                    "config": {
+                        "name": "dos.zone.browser",
+                        "productName": "DOS Zone Browser",
+                        "icon": "./src/icon.png",
+                        "categories": [
+                            "Game"
+                        ],
+                        "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
+                        "section": "games",
+                        "maintainer": "Alexander Guryanov <caiiiycuk@gmail.com>",
+                        "homepage": "https://dos.zone/"
+                    }
                 }
             ]
         }
