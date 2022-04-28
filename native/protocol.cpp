@@ -512,6 +512,7 @@ void mouseButton(const Napi::CallbackInfo& info) {
 
 
 Napi::Number getChangesSize(const Napi::CallbackInfo& info) {
+    std::lock_guard<std::mutex> g(changesMutex);
     return {Napi::Number::New(info.Env(), changesLength)};
 }
 
@@ -524,7 +525,7 @@ void getChanges(const Napi::CallbackInfo& info) {
     }
 
     memcpy(outcome.Data(), changesData, changesLength);
-    free(changesData);
+    free(changesData - sizeof(uint32_t));
     changesLength = 0;
     changesData = nullptr;
 }
@@ -637,11 +638,11 @@ void client_tick() {
     if (postChanges && changesMutex.try_lock()) {
         if (postChanges) {
             postChanges = false;
-
+            
             auto packed = zip_from_fs(fsCreatedAt);
             changesLength = ((uint32_t *) packed)[0];
-            changesData = (char *) packed + 4;
-
+            changesData = (char *) packed + sizeof(uint32_t);
+            
             changesMutex.unlock();
 
             jsonstream stream;
