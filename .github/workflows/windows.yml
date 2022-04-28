@@ -23,6 +23,7 @@ jobs:
         update: true
         install: >-
           base-devel
+          mingw-w64-x86_64-toolchain
           git
           cmake
     - shell: msys2 {0}
