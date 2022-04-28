@@ -11,7 +11,8 @@
         "dev": "cmake-js compile && electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
-        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-rpm,@electron-forge/maker-deb"
+        "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-rpm,@electron-forge/maker-deb",
+        "make-mac": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
     },
     "devDependencies": {
         "@electron-forge/cli": "^6.0.0-beta.63",
@@ -19,6 +20,7 @@
         "@electron-forge/maker-deb": "^6.0.0-beta.63",
         "@electron-forge/maker-rpm": "^6.0.0-beta.63",
         "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+        "@electron-forge/maker-dmg": "^6.0.0-beta.63",
         "cmake-js": "^6.3.0",
         "electron": "13.6.9",
         "eslint": "^8.14.0",
@@ -47,6 +49,13 @@
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
                         "name": "dos.zone.browser"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-dmg",
+                    "config": {
+                        "name": "dos.zone.browser",
+                        "icon": "./src/icon.icns"
                     }
                 },
                 {
