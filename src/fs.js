@@ -39,7 +39,7 @@ function prepareFs() {
 };
 
 function getDataPath(name) {
-    return path.join(data, name);
+    return path.join(root, data, name);
 };
 
 module.exports.prepareFs = prepareFs;

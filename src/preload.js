@@ -45,7 +45,7 @@ function setupHardware() {
         preventUnload: false,
         readConfig: () => {
             try {
-                const config = fs.readFileSync(path.join(".jsdos", "jsdos.json"), "utf8");
+                const config = fs.readFileSync(getDataPath(path.join(".jsdos", "jsdos.json")), "utf8");
                 return config;
             } catch (e) {
                 console.error(e);

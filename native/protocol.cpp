@@ -3,15 +3,10 @@
 //
 #include <napi.h>
 
-#include <protocol.h>
-
 #include <cstring>
 #include <string>
 #include <sstream>
-#include <unistd.h>
 #include <stdio.h>
-#include <jsdos-libzip.h>
-
 #include <atomic>
 #include <mutex>
 #include <thread>
@@ -19,6 +14,45 @@
 
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
+
+#ifdef WIN32
+#include <direct.h>
+#include "protocol_dyn.h"
+
+#define client_frame_set_size client_frame_set_size_impl 
+#define client_frame_update_lines client_frame_update_lines_impl 
+#define client_sound_init client_sound_init_impl 
+#define client_sound_push client_sound_push_impl 
+#define client_stdout client_stdout_impl 
+#define client_log client_log_impl 
+#define client_warn client_warn_impl 
+#define client_error client_error_impl 
+#define client_network_connected client_network_connected_impl 
+#define client_network_disconnected client_network_disconnected_impl 
+#define client_tick client_tick_impl 
+
+#define server_run server_run_dyn
+#define server_add_key server_add_key_dyn
+#define server_mouse_moved server_mouse_moved_dyn
+#define server_mouse_button server_mouse_button_dyn
+#define server_mouse_sync server_mouse_sync_dyn
+#define server_pause server_pause_dyn
+#define server_resume server_resume_dyn
+#define server_mute server_mute_dyn
+#define server_unmute server_unmute_dyn
+#define server_exit server_exit_dyn
+#define server_network_connect server_network_connect_dyn
+#define server_network_disconnect server_network_disconnect_dyn
+
+#define zip_set_on_progress zip_set_on_progress_dyn
+#define zip_from_fs zip_from_fs_dyn
+#define zipfile_to_fs zipfile_to_fs_dyn
+#define get_changes_mtime_ms get_changes_mtime_ms_dyn
+#else
+#include <protocol.h>
+#include <unistd.h>
+#include <jsdos-libzip.h>
+#endif
 
 class jsonstream {
     bool keyNext;
@@ -92,7 +126,11 @@ std::vector<InputRecord> inputs;
 std::thread nativeThread;
 
 inline bool exists(const char* name) {
+#ifdef WIN32
+    return GetFileAttributes(name) != INVALID_FILE_ATTRIBUTES;
+#else
     return access(name, F_OK) != -1;
+#endif
 }
 
 void postMessage(const jsonstream& stream) {
@@ -153,7 +191,7 @@ void ma_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint3
         started = true;
     }
 
-    int32_t copySize = std::min((int32_t) numFrames, soundBufferUsed);
+    auto copySize = std::min<int32_t>(numFrames, soundBufferUsed);
     memcpy(pOutput, soundBuffer, copySize * 4);
 
     if (copySize < soundBufferUsed) {
@@ -342,7 +380,11 @@ void sendMessage(const Napi::CallbackInfo& info) {
     } else if (name == "wc-run") {
         nativeThread = std::thread([]() {
             jsonstream stream;
+#ifdef WIN32
+            _chdir(baseDir.c_str());
+#else
             chdir(baseDir.c_str());
+#endif
 
             if (exists("bundle_0.zip")) {
                 zip_set_on_progress([](const char* file, int extracted, int total) {
@@ -363,7 +405,7 @@ void sendMessage(const Napi::CallbackInfo& info) {
 
             fsCreatedAt = get_changes_mtime_ms();
 
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::seconds(2));
 
             if (exists("bundle_1.zip")) {
                 zipfile_to_fs("bundle_1.zip");
@@ -564,7 +606,7 @@ void client_network_disconnected(NetworkType networkType) {
     postMessage(stream);
 }
 
-void server_loop() {
+void client_tick() {
     if (inputChanges && inputMutex.try_lock()) {
         if (inputChanges) {
             inputChanges = false;
@@ -669,6 +711,19 @@ void registerCallbacks(const Napi::CallbackInfo &info) {
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
+#ifdef WIN32
+  set_client_frame_set_size(client_frame_set_size_impl);
+  set_client_frame_update_lines(client_frame_update_lines_impl);
+  set_client_sound_init(client_sound_init_impl);
+  set_client_sound_push(client_sound_push_impl);
+  set_client_stdout(client_stdout_impl);
+  set_client_log(client_log_impl);
+  set_client_warn(client_warn_impl);
+  set_client_error(client_error_impl);
+  set_client_network_connected(client_network_connected_impl);
+  set_client_network_disconnected(client_network_disconnected_impl);
+  set_client_tick(client_tick_impl);
+#endif
   printf("-- emulators new --\n");
   exports.Set("sendMessage", Napi::Function::New(env, sendMessage));
   exports.Set("getFrameWidth", Napi::Function::New(env, getFrameWidth));

@@ -104,7 +104,11 @@ dist
 .tern-port
 
 build
+build-mingw
 .vscode
 src/emulators.node
 data
 out
+
+libjsdos.*
+*.dll

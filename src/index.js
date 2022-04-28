@@ -33,6 +33,8 @@ const createWindow = () => {
 
     // window.loadURL("https://dos.zone/the-need-for-speed-sep-1995/");
     // window.loadURL("https://dos.zone/dangerous-dave-in-the-haunted-mansion-1991/");
+    // window.loadURL("https://dos.zone/digger-may-06-1999/");
+    // window.loadURL("https://dos.zone/doom-dec-1993/");
     window.loadURL("https://dos.zone");
 
     // window.webContents.openDevTools({ mode: "left" });
