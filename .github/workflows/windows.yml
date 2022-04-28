@@ -24,6 +24,7 @@ jobs:
         install: >-
           base-devel
           git
+          cmake
     - shell: msys2 {0}
       run: |
         mkdir build-mingw
