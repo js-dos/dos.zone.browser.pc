@@ -11,6 +11,7 @@
         "dev": "cmake-js compile && electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
+        "make-win": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
         "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-rpm,@electron-forge/maker-deb",
         "make-mac": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-dmg,@electron-forge/maker-deb"
     },
@@ -48,7 +49,12 @@
                 {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
-                        "name": "dos.zone.browser"
+                        "name": "dos.zone.browser",
+                        "exe": "dos.zone.browser",
+                        "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
+                        "iconUrl": "./src/icon.ico",
+                        "setupIcon": "./src/icon.ico",
+                        "title": "DOS Zone Browser"
                     }
                 },
                 {

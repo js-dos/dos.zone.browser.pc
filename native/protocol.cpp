@@ -90,6 +90,7 @@ char* framePayload = nullptr;
 
 std::mutex changesMutex;
 std::atomic_bool postChanges(false);
+ZipArchive changesPtr = nullptr;
 int changesLength = 0;
 char* changesData = nullptr;
 
@@ -520,12 +521,18 @@ void getChanges(const Napi::CallbackInfo& info) {
     auto outcome = info[0].As<Napi::ArrayBuffer>();
     std::lock_guard<std::mutex> g(changesMutex);
 
-    if (changesData == nullptr || changesLength == 0) {
+    if (changesPtr == nullptr || changesData == nullptr || changesLength == 0) {
         return;
     }
 
     memcpy(outcome.Data(), changesData, changesLength);
-    free(changesData - sizeof(uint32_t));
+
+    // TODO: understand why it segfaults on windows
+#ifdef FREECHANGES_PTR
+    free(changesPtr);
+#endif
+
+    changesPtr = nullptr;
     changesLength = 0;
     changesData = nullptr;
 }
@@ -639,9 +646,9 @@ void client_tick() {
         if (postChanges) {
             postChanges = false;
             
-            auto packed = zip_from_fs(fsCreatedAt);
-            changesLength = ((uint32_t *) packed)[0];
-            changesData = (char *) packed + sizeof(uint32_t);
+            changesPtr = zip_from_fs(fsCreatedAt);
+            changesLength = ((uint32_t *) changesPtr)[0];
+            changesData = (char *) changesPtr + sizeof(uint32_t);
             
             changesMutex.unlock();
 
