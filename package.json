@@ -1,5 +1,6 @@
 {
-    "name": "dos.zone.browser.pc",
+    "name": "dos.zone.browser",
+    "productName": "DOS Zone Browser",
     "version": "1.0.0",
     "description": "DOS Zone Browser with hardware acceleration",
     "main": "src/index.js",
@@ -11,6 +12,7 @@
         "dev": "cmake-js compile && electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
+        "make-zip": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-zip",
         "make-win": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
         "make-linux": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-rpm,@electron-forge/maker-deb",
         "make-mac": "cmake-js compile && electron-forge make --arch x64 --targets @electron-forge/maker-dmg,@electron-forge/maker-deb"
@@ -28,18 +30,18 @@
         "eslint-config-google": "^0.14.0",
         "node-addon-api": "^4.3.0"
     },
+    "dependencies": {
+        "electron-squirrel-startup": "^1.0.0"
+    },
     "cmake-js": {
         "runtime": "electron",
         "runtimeVersion": "13.6.9",
         "arch": "x64"
     },
-    "dependencies": {
-        "electron-squirrel-startup": "^1.0.0"
-    },
     "config": {
         "forge": {
             "packagerConfig": {
-                "ignore": "(.vscode|build|node_modules|data|emulators|native|.eslintrc.json|.gitignore|.gitmodules|CMakeLists.txt|yarn.lock|README.md)$",
+                "ignore": "(.vscode|build|data|emulators|native|.eslintrc.json|.gitignore|.gitmodules|CMakeLists.txt|yarn.lock|README.md|build-mingw|.github)$",
                 "icon": "./src/icon"
             },
             "makers": [
@@ -49,10 +51,8 @@
                 {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
-                        "name": "dos.zone.browser",
-                        "exe": "dos.zone.browser",
+                        "name": "dos.zone.browser.pc",
                         "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
-                        "iconUrl": "./src/icon.ico",
                         "setupIcon": "./src/icon.ico",
                         "title": "DOS Zone Browser"
                     }

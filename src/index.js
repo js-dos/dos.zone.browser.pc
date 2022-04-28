@@ -59,12 +59,16 @@ const createWindow = () => {
     });
 };
 
-app.whenReady().then(() => {
-    app.allowRendererProcessReuse = false;
-    app.applicationMenu = null;
-    createWindow();
-});
-
-app.on("window-all-closed", () => {
+if (process.platform == "win32" && require("electron-squirrel-startup")) {
     app.quit();
-});
+} else {
+    app.whenReady().then(() => {
+        app.allowRendererProcessReuse = false;
+        app.applicationMenu = null;
+        createWindow();
+    });
+
+    app.on("window-all-closed", () => {
+        app.quit();
+    });
+}
