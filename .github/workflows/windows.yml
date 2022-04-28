@@ -1,0 +1,46 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          base-devel
+          git
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: jsdos.dll
+    - shell: msys2 {0}
+      run: |
+        mkdir build-mingw
+        cd build-mingw
+        cmake -G "Unix Makefiles" ..
+        make -j4
+        cd ..
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install -g yarn
+    - run: yarn
+    - run: yarn run make-linux
+    - name: publish artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: dos.zone.browser.pc.win.zip
+        path: out/make/
