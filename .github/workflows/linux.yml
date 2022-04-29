@@ -25,7 +25,7 @@ jobs:
         cache: 'npm'
     - run: npm install -g yarn
     - run: yarn
-    - run: sed -i '2d' package.json
+    - run: sed -i '3d' package.json
     - run: yarn run make-linux
     - name: publish artifact
       uses: actions/upload-artifact@v2
