@@ -1,6 +1,10 @@
 # dos.zone.browser.pc
 DOS Zone Browser with hardware acceleration
 
+[![.github/workflows/make-mac.yml](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/make-mac.yml/badge.svg)](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/make-mac.yml)
+[![.github/workflows/windows.yml](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/windows.yml/badge.svg)](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/windows.yml)
+[![.github/workflows/linux.yml](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/linux.yml/badge.svg)](https://github.com/js-dos/dos.zone.browser.pc/actions/workflows/linux.yml)
+
 ## Building
 
 ```
