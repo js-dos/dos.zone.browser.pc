@@ -120,6 +120,9 @@ function setupHardware() {
                 return e.message;
             }
         },
+        onVolumeChanged: (volume) => {
+            impl.setVolume(volume);
+        },
     };
 
 

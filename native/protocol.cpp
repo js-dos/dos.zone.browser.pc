@@ -81,6 +81,8 @@ std::string sessionId = "";
 const std::string baseDir = "data";
 double fsCreatedAt = 0;
 
+std::atomic_int volume(256);
+
 std::atomic_int frameWidth(0);
 std::atomic_int frameHeight(0);
 std::atomic_bool frameChanged;
@@ -192,8 +194,20 @@ void ma_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint3
         started = true;
     }
 
+    int targetVolume = volume;
     auto copySize = std::min<int32_t>(numFrames, soundBufferUsed);
-    memcpy(pOutput, soundBuffer, copySize * 4);
+    if (targetVolume > 250) {
+        memcpy(pOutput, soundBuffer, copySize * 4);
+    } else {
+        float fVolume = targetVolume / 256.0f;
+        float *dst = (float*) pOutput;
+        float *src = soundBuffer;
+        for (int i = 0; i < copySize; ++i) {
+            *dst = *src * fVolume;
+            ++src;
+            ++dst;
+        }
+    }
 
     if (copySize < soundBufferUsed) {
         auto rest = soundBufferUsed - copySize;
@@ -479,6 +493,11 @@ void addKey(const Napi::CallbackInfo& info) {
     inputChanges = true;
 }
 
+void setVolume(const Napi::CallbackInfo& info) {
+    auto fVolume = info[0].As<Napi::Number>().FloatValue();
+    volume = fVolume * 256;
+}
+
 void mouseMove(const Napi::CallbackInfo& info) {
     auto x = info[0].As<Napi::Number>().FloatValue();
     auto y = info[1].As<Napi::Number>().FloatValue();
@@ -743,6 +762,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("getChangesSize", Napi::Function::New(env, getChangesSize));
   exports.Set("getChanges", Napi::Function::New(env, getChanges));
   exports.Set("registerCallbacks", Napi::Function::New(env, registerCallbacks));
+  exports.Set("setVolume", Napi::Function::New(env, setVolume));
   return exports;
 }
 

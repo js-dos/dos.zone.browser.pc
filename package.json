@@ -1,7 +1,7 @@
 {
     "name": "dos.zone.browser",
     "productName": "DOS Zone Browser",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "DOS Zone Browser with hardware acceleration",
     "main": "src/index.js",
     "repository": "git@github.com:js-dos/dos.zone.browser.pc.git",
@@ -19,14 +19,14 @@
     },
     "devDependencies": {
         "@electron-forge/cli": "^6.0.0-beta.63",
-        "@electron-forge/maker-zip": "^6.0.0-beta.63",
         "@electron-forge/maker-deb": "^6.0.0-beta.63",
+        "@electron-forge/maker-dmg": "^6.0.0-beta.63",
         "@electron-forge/maker-rpm": "^6.0.0-beta.63",
         "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
-        "@electron-forge/maker-dmg": "^6.0.0-beta.63",
+        "@electron-forge/maker-zip": "^6.0.0-beta.63",
         "cmake-js": "^6.3.0",
         "electron": "13.6.9",
-        "eslint": "^8.14.0",
+        "eslint": "^8.17.0",
         "eslint-config-google": "^0.14.0",
         "node-addon-api": "^4.3.0"
     },
