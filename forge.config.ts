@@ -16,6 +16,15 @@ const config: ForgeConfig = {
     rebuildConfig: {},
     makers: [
         {
+            name: "@electron-forge/maker-appx",
+            config: {
+                identityName: "5210IPGuryanovAleksander.DOSZoneBrowser",
+                publisher: "CN=BBE8A787-00D2-4374-B70A-5E9307AF423C",
+                publisherDisplayName: "IP Guryanov Aleksander",
+                assets: "./assets",
+            },
+        },
+        {
             name: "@electron-forge/maker-wix",
             config: {
                 language: 1033,

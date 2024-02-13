@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity Name="DOSZoneBrowser"
+    ProcessorArchitecture="x64"
+    Publisher="CN=BBE8A787-00D2-4374-B70A-5E9307AF423C"
+    Version="8.0.0.0" />
+  <Properties>
+    <DisplayName>DOS Zone Browser</DisplayName>
+    <PublisherDisplayName>IP Guryanov Aleksander</PublisherDisplayName>
+    <Description>No description entered</Description>
+    <Logo>assets\SampleAppx.50x50.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.14316.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+  </Capabilities>
+  <Applications>
+    <Application Id="5210IPGuryanovAleksander.DOSZoneBrowser" Executable="app\DOS Zone Browser.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+       BackgroundColor="#464646"
+       DisplayName="DOS Zone Browser"
+       Square150x150Logo="assets\SampleAppx.150x150.png"
+       Square44x44Logo="assets\SampleAppx.44x44.png"
+       Description="This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.">
+        <uap:DefaultTile Wide310x150Logo="assets\SampleAppx.310x150.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+</Package>

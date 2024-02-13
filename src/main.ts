@@ -1,5 +1,6 @@
-import { app, shell, BrowserWindow } from "electron";
+import { app, shell, BrowserWindow, ipcMain } from "electron";
 import path from "path";
+import { createBackend } from "./runtime";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -15,7 +16,7 @@ const createApp = () => {
         height: 1000,
         icon: process.platform === "darwin" || process.platform === "win32" ?
             undefined :
-            path.join(__dirname, "icon.png"),
+            "src/icon.png",
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
@@ -36,7 +37,16 @@ const createApp = () => {
         };
     });
 
-    window.loadURL("https://dos.zone/studio-v8");
+    // eslint-disable-next-line
+    let startUrl = "https://dos.zone";
+    // startUrl = "http://localhost:8000/";
+    // startUrl = "https://dos.zone/studio-v8");
+    // startUrl = "https://dos.zone/digger-may-06-1999/";
+    startUrl = "https://dos.zone/dhrystone-2-test-jul-2020/";
+    window.loadURL(startUrl).catch(() => {
+        window.loadFile("index.html");
+    });
+
     window.webContents.openDevTools({
         mode: "detach",
     });
@@ -61,5 +71,28 @@ app.on("activate", () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
         createApp();
+    }
+});
+
+// ipc
+
+let cleanupFn: () => void = () => {/**/};
+
+ipcMain.on("cleanup", () => {
+    cleanupFn();
+});
+
+ipcMain.on("backend", async (e, backend: "dosbox" | "dosboxX") => {
+    cleanupFn();
+    const impl = await createBackend(backend);
+    if (impl) {
+        cleanupFn = () => {
+            impl.child.kill();
+            cleanupFn = () => {/**/};
+        };
+        e.sender.send("ws", "ws://127.0.0.1:" + impl.port);
+    } else {
+        cleanupFn = () => {/**/};
+        e.sender.send("ws", null);
     }
 });
