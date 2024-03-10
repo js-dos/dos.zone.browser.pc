@@ -18,12 +18,13 @@ const config: ForgeConfig = {
         {
             name: "@electron-forge/maker-appx",
             config: {
-                identityName: "5210IPGuryanovAleksander.DOSZoneBrowser",
-                publisher: "CN=BBE8A787-00D2-4374-B70A-5E9307AF423C",
-                publisherDisplayName: "IP Guryanov Aleksander",
+                identityName: "GuryanovAlexander.DOS.ZoneBrowser",
+                publisher: "CN=7A0C9797-CAC9-41D8-8D96-740F9AA2E221",
+                publisherDisplayName: "Guryanov Alexander",
                 assets: "./assets",
             },
         },
+        /*
         {
             name: "@electron-forge/maker-wix",
             config: {
@@ -31,6 +32,7 @@ const config: ForgeConfig = {
                 manufacturer: "DOS.Zone",
             },
         },
+        */
         new MakerSquirrel({
             "name": "dos.zone.browser.pc",
             description,
