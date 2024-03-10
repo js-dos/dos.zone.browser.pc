@@ -7,6 +7,8 @@ if (require("electron-squirrel-startup")) {
     app.quit();
 }
 
+let cleanupFn: () => void = () => {/**/};
+
 const createApp = () => {
     app.applicationMenu = null;
 
@@ -61,6 +63,9 @@ app.on("ready", createApp);
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
+    cleanupFn();
+    cleanupFn = () => {/**/};
+
     if (process.platform !== "darwin") {
         app.quit();
     }
@@ -76,10 +81,9 @@ app.on("activate", () => {
 
 // ipc
 
-let cleanupFn: () => void = () => {/**/};
-
 ipcMain.on("cleanup", () => {
     cleanupFn();
+    cleanupFn = () => {/**/};
 });
 
 ipcMain.on("backend", async (e, backend: "dosbox" | "dosboxX") => {
