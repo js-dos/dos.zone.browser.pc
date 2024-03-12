@@ -94,6 +94,7 @@ ipcMain.on("backend", async (e, backend: "dosbox" | "dosboxX") => {
             impl.child.kill();
             cleanupFn = () => {/**/};
         };
+        console.log("Connect to port", impl.port);
         e.sender.send("ws", "ws://127.0.0.1:" + impl.port);
     } else {
         cleanupFn = () => {/**/};

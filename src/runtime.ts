@@ -1,10 +1,12 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import { join } from "path";
-import { rmSync, mkdirSync, chmodSync, existsSync } from "fs";
+import { join, isAbsolute } from "path";
+import { rmSync, mkdirSync, existsSync } from "fs";
 import { spawn } from "child_process";
 import { dialog } from "electron";
 import { platform } from "process";
+import { createServer } from "net";
+
 
 const data = join("app", "data");
 const backends = {
@@ -19,6 +21,9 @@ if (platform === "darwin") {
     backends["dosbox"] = join("src", "app", "doszone-backend");
     backends["dosboxX"] = join("src", "app", "doszone-backend-x");
 }
+
+// backends["dosbox"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox";
+// backends["dosboxX"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox-x";
 
 export async function createBackend(backend: "dosbox" | "dosboxX") {
     console.log("Hardware requested for", backend);
@@ -49,7 +54,7 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
 
         mkdirSync(data, { recursive: true });
         mkdirSync(join(data, ".jsdos"));
-        
+
         if (!existsSync(data)) {
             reportOnce("ERROR! Unabel to create data directory");
             return null;
@@ -59,13 +64,13 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
         return null;
     }
 
-    const child = spawn(join("..", "..", exe), {
-        cwd: data,
-    });
+    const port = await getNextPort();
+    const child = spawn(isAbsolute(exe) ? exe : join("..", "..", exe),
+        [port + ""], { cwd: data });
 
     try {
         child.stdout.setEncoding("utf-8");
-        child.stdout.on("data", function(data) {
+        child.stdout.on("data", function (data) {
             console.log("backend:", data);
         });
 
@@ -74,7 +79,7 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
         });
 
         return {
-            port: 8080,
+            port,
             child,
         };
     } catch (e) {
@@ -83,3 +88,14 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
     }
 }
 
+function getNextPort(): Promise<number> {
+    return new Promise((resolve) => {
+        const server = createServer();
+        server.listen(0, () => {
+            const port = (server.address() as any).port;
+            server.close(() => {
+                resolve(port);
+            });
+        });
+    });
+}
