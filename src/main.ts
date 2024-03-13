@@ -44,14 +44,14 @@ const createApp = () => {
     // startUrl = "http://localhost:8000/";
     // startUrl = "https://dos.zone/studio-v8");
     // startUrl = "https://dos.zone/digger-may-06-1999/";
-    startUrl = "https://dos.zone/dhrystone-2-test-jul-2020/";
+    // startUrl = "https://dos.zone/dhrystone-2-test-jul-2020/";
     window.loadURL(startUrl).catch(() => {
         window.loadFile("index.html");
     });
 
-    window.webContents.openDevTools({
-        mode: "detach",
-    });
+    // window.webContents.openDevTools({
+    //     mode: "detach",
+    // });
 };
 
 // This method will be called when Electron has finished
