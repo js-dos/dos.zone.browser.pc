@@ -1,6 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import { createBackend } from "./runtime";
+import { debug } from "./config";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -49,9 +50,11 @@ const createApp = () => {
         window.loadFile("index.html");
     });
 
-    // window.webContents.openDevTools({
-    //     mode: "detach",
-    // });
+    if (debug() !== "off") {
+        window.webContents.openDevTools({
+            mode: "detach",
+        });
+    }
 };
 
 // This method will be called when Electron has finished
@@ -91,7 +94,7 @@ ipcMain.on("backend", async (e, backend: "dosbox" | "dosboxX") => {
     const impl = await createBackend(backend);
     if (impl) {
         cleanupFn = () => {
-            impl.child.kill();
+            impl.child?.kill();
             cleanupFn = () => {/**/};
         };
         console.log("Connect to port", impl.port);

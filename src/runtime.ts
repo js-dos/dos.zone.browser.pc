@@ -6,7 +6,7 @@ import { spawn } from "child_process";
 import { dialog } from "electron";
 import { platform } from "process";
 import { createServer } from "net";
-
+import { debug } from "./config";
 
 const data = join("app", "data");
 const backends = {
@@ -22,11 +22,19 @@ if (platform === "darwin") {
     backends["dosboxX"] = join("src", "app", "doszone-backend-x");
 }
 
-// backends["dosbox"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox";
-// backends["dosboxX"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox-x";
+if (debug() === "file") {
+    backends["dosbox"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox";
+    backends["dosboxX"] = "/home/caiiiycuk/js-dos/emulators-ws/cmake-build-debug/ws-dosbox-x";
+}
 
 export async function createBackend(backend: "dosbox" | "dosboxX") {
     console.log("Hardware requested for", backend);
+
+    if (debug() === "port") {
+        return {
+            port: 8080,
+        };
+    }
 
     let reported = false;
     function reportOnce(message: string, e?: Error | string) {
@@ -70,7 +78,7 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
 
     try {
         child.stdout.setEncoding("utf-8");
-        child.stdout.on("data", function (data) {
+        child.stdout.on("data", function(data) {
             console.log("backend:", data);
         });
 
@@ -92,6 +100,7 @@ function getNextPort(): Promise<number> {
     return new Promise((resolve) => {
         const server = createServer();
         server.listen(0, () => {
+            /* eslint-disable @typescript-eslint/no-explicit-any */
             const port = (server.address() as any).port;
             server.close(() => {
                 resolve(port);
