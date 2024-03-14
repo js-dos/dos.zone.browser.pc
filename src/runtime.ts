@@ -1,13 +1,28 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import { join, isAbsolute } from "path";
+import { join, isAbsolute, resolve } from "path";
 import { rmSync, mkdirSync, existsSync } from "fs";
 import { spawn } from "child_process";
 import { dialog } from "electron";
 import { platform } from "process";
 import { createServer } from "net";
 import { debug } from "./config";
-const baseDir = existsSync("src") ? "." : join("resources", "app");
+
+const baseDir = (function detectBaseDir() {
+    if (existsSync("src")) {
+        return resolve(".");
+    }
+
+    if (existsSync(join("resources", "app"))) {
+        return resolve(join("resources", "app"));
+    }
+
+    if (existsSync("/usr/lib/dos.zone-browser/resources/app")) {
+        return "/usr/lib/dos.zone-browser/resources/app";
+    }
+
+    return resolve(".");
+})();
 
 const data = join("app", "data");
 const backends = {
@@ -74,7 +89,8 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
     }
 
     const port = await getNextPort();
-    const child = spawn(isAbsolute(exe) ? exe : join("..", "..", exe),
+    const cmd = isAbsolute(exe) ? exe : join("..", "..", exe);
+    const child = spawn(cmd,
         [port + ""], { cwd: data });
 
     try {

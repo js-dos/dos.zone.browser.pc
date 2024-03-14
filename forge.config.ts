@@ -12,6 +12,7 @@ const config: ForgeConfig = {
     packagerConfig: {
         /* eslint-disable-next-line */
         "icon": "./src/icon",
+        "executableName": "dos.zone.browser.pc",
     },
     rebuildConfig: {},
     makers: [
@@ -24,7 +25,6 @@ const config: ForgeConfig = {
                 assets: "./assets",
             },
         },
-        /*
         {
             name: "@electron-forge/maker-wix",
             config: {
@@ -32,16 +32,15 @@ const config: ForgeConfig = {
                 manufacturer: "DOS.Zone",
             },
         },
-        */
         new MakerSquirrel({
-            "name": "dos.zone.browser.pc",
+            "name": "DOS.Zone Browser",
             description,
             "setupIcon": "./src/icon.ico",
         }),
-        new MakerZIP({}, ["darwin"]),
+        new MakerZIP({}),
         new MakerRpm({
-            "name": "dos.zone.browser",
-            "productName": "DOS Zone Browser",
+            "name": "DOS.Zone Browser",
+            "productName": "DOS.Zone Browser",
             "icon": "./src/icon.png",
             "categories": [
                 "Game",
@@ -52,8 +51,8 @@ const config: ForgeConfig = {
             "homepage": "https://dos.zone/",
         } as MakerRpmConfig),
         new MakerDeb({
-            "name": "dos.zone.browser",
-            "productName": "DOS Zone Browser",
+            "name": "DOS.Zone Browser",
+            "productName": "DOS.Zone Browser",
             "icon": "./src/icon.png",
             "categories": [
                 "Game",
