@@ -7,19 +7,20 @@ import { dialog } from "electron";
 import { platform } from "process";
 import { createServer } from "net";
 import { debug } from "./config";
+const baseDir = existsSync("src") ? "." : join("resources", "app");
 
 const data = join("app", "data");
 const backends = {
-    "dosbox": join("src", "app", "doszone-backend.exe"),
-    "dosboxX": join("src", "app", "doszone-backend-x.exe"),
+    "dosbox": join(baseDir, "src", "app", "doszone-backend.exe"),
+    "dosboxX": join(baseDir, "src", "app", "doszone-backend-x.exe"),
 };
 
 if (platform === "darwin") {
-    backends["dosbox"] = join("src", "app", "osx-doszone-backend");
-    backends["dosboxX"] = join("src", "app", "osx-doszone-backend-x");
+    backends["dosbox"] = join(baseDir, "src", "app", "osx-doszone-backend");
+    backends["dosboxX"] = join(baseDir, "src", "app", "osx-doszone-backend-x");
 } else if (platform === "linux") {
-    backends["dosbox"] = join("src", "app", "doszone-backend");
-    backends["dosboxX"] = join("src", "app", "doszone-backend-x");
+    backends["dosbox"] = join(baseDir, "src", "app", "doszone-backend");
+    backends["dosboxX"] = join(baseDir, "src", "app", "doszone-backend-x");
 }
 
 if (debug() === "file") {
