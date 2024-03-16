@@ -33,8 +33,8 @@ const config: ForgeConfig = {
             },
         },
         new MakerSquirrel({
-            "name": "DOS.Zone Browser",
-            description,
+            "name": "dos.zone.browser.pc",
+            "description": description,
             "setupIcon": "./src/icon.ico",
         }),
         new MakerZIP({}),
