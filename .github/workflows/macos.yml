@@ -24,6 +24,6 @@ jobs:
     - run: yarn run make
     - uses: actions/upload-artifact@v4
       with:
-        name: ws
+        name: dz-mac
         path: |
-          out/**/*
+          out/make/*
