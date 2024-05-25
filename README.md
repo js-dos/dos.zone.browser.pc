@@ -18,8 +18,7 @@ chmod 777 src/app/osx-doszone-backend-x
 # Update app
 
 * Download all releases from `https://github.com/js-dos/dos.zone.browser.pc/actions`
-
-Execute:
+* Execute:
 
 ```
 rm -rf latest
@@ -29,3 +28,5 @@ unzip dz-linux.zip -d latest/linux
 unzip dz-windows.zip -d latest/windows
 aws s3 --endpoint-url=https://storage.yandexcloud.net sync --acl public-read latest s3://doszone-uploads/app/latest
 ```
+
+* Clear content cache /app/latest/*
