@@ -17,6 +17,10 @@ chmod 777 src/app/osx-doszone-backend-x
 
 # Update app
 
+* Download all releases from `https://github.com/js-dos/dos.zone.browser.pc/actions`
+
+Execute:
+
 ```
 rm -rf latest
 mkdir -p latest/mac latest/linux latest/windows
