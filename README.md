@@ -4,7 +4,7 @@
 * Execute:
 
 ```sh
-unzip ~/Downloads/ws.zip -d src/app
+unzip -o ~/Downloads/ws.zip -d src/app
 ```
 
 Update rights
