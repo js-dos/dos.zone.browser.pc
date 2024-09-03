@@ -1,19 +1,19 @@
+# Develop
+
+```sh
+yarn run start
+```
+
 # Update the emulators-ws
 
-* Download all artifacts from `https://github.com/js-dos/emulators-ws/actions`
+* Download all binaries from `https://github.com/js-dos/emulators-ws/releases/` into some directory
 * Execute:
 
 ```sh
-unzip -o ~/Downloads/ws.zip -d src/app
+./scripts/update-emu.sh <directory>
 ```
 
-Update rights
-```sh
-chmod 777 src/app/doszone-backend
-chmod 777 src/app/doszone-backend-x
-chmod 777 src/app/osx-doszone-backend
-chmod 777 src/app/osx-doszone-backend-x
-```
+* Test, commit and push
 
 # Update app
 
@@ -29,4 +29,4 @@ unzip dz-windows.zip -d latest/windows
 aws s3 --endpoint-url=https://storage.yandexcloud.net sync --acl public-read latest s3://doszone-uploads/app/latest
 ```
 
-* Clear content cache /app/latest/*
+* Clear content cache /app/latest/
