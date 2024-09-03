@@ -23,6 +23,7 @@ const config: ForgeConfig = {
                 publisher: "CN=7A0C9797-CAC9-41D8-8D96-740F9AA2E221",
                 publisherDisplayName: "Guryanov Alexander",
                 assets: "./assets",
+                packageExecutable: "app/dos.zone.browser.pc.exe",
             },
         },
         {

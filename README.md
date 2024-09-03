@@ -29,4 +29,10 @@ unzip dz-windows.zip -d latest/windows
 aws s3 --endpoint-url=https://storage.yandexcloud.net sync --acl public-read latest s3://doszone-uploads/app/latest
 ```
 
-* Clear content cache /app/latest/
+* Clear content cache `/app/latest/*`
+
+# Appx
+
+```
+DEBUG=electron-windows-store* yarn run make --targets "@electron-forge/maker-appx"
+```
