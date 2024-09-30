@@ -6,6 +6,7 @@ import { spawn } from "child_process";
 import { dialog } from "electron";
 import { platform } from "process";
 import { createServer } from "net";
+import { tmpdir } from "os";
 import { debug } from "./config";
 
 const baseDir = (function detectBaseDir() {
@@ -21,10 +22,19 @@ const baseDir = (function detectBaseDir() {
         return "/usr/lib/dos.zone-browser/resources/app";
     }
 
+    if (existsSync(join(__dirname, "..", "..", "src"))) {
+        return resolve(join(__dirname, "..", ".."));
+    }
+
+    if (existsSync("/Applications/DOS.Zone Browser.app/Contents/Resources/app")) {
+        return "/Applications/DOS.Zone Browser.app/Contents/Resources/app";
+    }
+
+    console.error("Base dir not found, dirname and filename is:", __dirname, __filename);
     return resolve(".");
 })();
 
-const data = join("app", "data");
+const data = join(tmpdir(), "dos.zone");
 const backends = {
     "dosbox": join(baseDir, "src", "app", "doszone-backend.exe"),
     "dosboxX": join(baseDir, "src", "app", "doszone-backend-x.exe"),
@@ -90,17 +100,17 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
 
     const port = await getNextPort();
     const cmd = isAbsolute(exe) ? exe : join("..", "..", exe);
-    const child = spawn(cmd,
-        [port + ""], { cwd: data });
-
     try {
+        const child = spawn(cmd,
+            [port + ""], { cwd: data });
+
         child.stdout.setEncoding("utf-8");
         child.stdout.on("data", function(data) {
             console.log("backend:", data);
         });
 
         child.on("error", (e) => {
-            reportOnce("ERROR! Can't start backend", e);
+            reportOnce("ERROR! Can't start backend, cmd: '" + cmd + "'", e);
         });
 
         return {
@@ -108,7 +118,7 @@ export async function createBackend(backend: "dosbox" | "dosboxX") {
             child,
         };
     } catch (e) {
-        reportOnce("ERROR! Can't start backend", e);
+        reportOnce("ERROR! Can't start backend, cmd: '" + cmd + "'", e);
         return null;
     }
 }
