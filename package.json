@@ -1,7 +1,7 @@
 {
   "name": "dos.zone.browser.pc",
   "productName": "DOS.Zone Browser",
-  "version": "8.0.1",
+  "version": "8.0.4",
   "description": "This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.",
   "main": ".vite/build/main.js",
   "scripts": {
