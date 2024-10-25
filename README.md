@@ -24,6 +24,7 @@ yarn run start
 rm -rf latest
 mkdir -p latest/mac latest/linux latest/windows
 unzip dz-mac.zip -d latest/mac
+unzip dz-mac64.zip -d latest/mac64
 unzip dz-linux.zip -d latest/linux
 unzip dz-windows.zip -d latest/windows
 aws s3 --endpoint-url=https://storage.yandexcloud.net sync --acl public-read latest s3://doszone-uploads/app/latest
