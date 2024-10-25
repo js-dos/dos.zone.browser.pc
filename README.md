@@ -12,7 +12,7 @@ yarn run start
 ```sh
 ./scripts/update-emu.sh <directory>
 ```
-
+* Change version in `package.json`
 * Test, commit and push
 
 # Update app
