@@ -1,8 +1,8 @@
 # Build 
 
 ```sh
-yarn
-yarn run start
+npm i
+npm run start
 ```
 
 # Update the emulators-ws
@@ -36,5 +36,5 @@ aws s3 --endpoint-url=https://storage.yandexcloud.net sync --acl public-read lat
 # Appx
 
 ```
-DEBUG=electron-windows-store* yarn run make --targets "@electron-forge/maker-appx"
+DEBUG=electron-windows-store* npm run make --targets "@electron-forge/maker-appx"
 ```
