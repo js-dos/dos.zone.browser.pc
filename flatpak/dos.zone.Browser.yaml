@@ -1,0 +1,44 @@
+id: dos.zone.Browser
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '24.08'
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node20
+command: run.sh
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=network
+build-options:
+  append-path: /usr/lib/sdk/node20/bin
+  env:
+    NPM_CONFIG_LOGLEVEL: info
+modules:
+  - name: dos-browser
+    buildsystem: simple
+    build-options:
+      env:
+        XDG_CACHE_HOME: /run/build/dos-browser/flatpak-node/cache
+        npm_config_cache: /run/build/dos-browser/flatpak-node/npm-cache
+        npm_config_offline: 'true'
+    build-commands:
+      - npm install --offline
+      - npm run make -- --targets "@electron-forge/maker-zip"
+      - unzip out/make/zip/linux/x64/DOS.Zone\ Browser-linux-x64-8.0.5.zip -d /app
+      - mv /app/DOS.Zone\ Browser-linux-x64 /app/browser
+      - install -Dm755 -t /app/bin/ run.sh
+    sources:
+      #- type: archive
+      #  url: https://github.com/flathub/dos-browser/archive/1.0.1.tar.gz
+      #  sha256: a2feb3f1cf002a2e4e8900f718cc5c54db4ad174e48bfcfbddcd588c7b716d5b
+      - type: dir
+        path: ..
+      - generated-sources.json
+      - type: script
+        dest-filename: run.sh
+        commands:
+          - zypak-wrapper.sh /app/browser/dos.zone.browser.pc "$@"

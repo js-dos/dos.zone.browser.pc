@@ -93,3 +93,4 @@ out/
 
 app/data
 dist
+.flatpak-builder

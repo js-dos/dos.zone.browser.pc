@@ -2,9 +2,11 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import { createBackend } from "./runtime";
 import { debug } from "./config";
+import started from "electron-squirrel-startup";
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require("electron-squirrel-startup")) {
+if (started) {
     app.quit();
 }
 

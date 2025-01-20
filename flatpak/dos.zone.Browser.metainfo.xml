@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>dos.zone.Browser</id>
+  <name>DOS Browser</name>
+  <project_license>GPL-2.0</project_license>
+  <developer_name>Alexander Guryanov</developer_name>
+  <summary>This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <url type="homepage">https://dos.zone</url>
+  <url type="bugtracker">https://github.com/caiiiycuk/js-dos/issues</url>
+  <url type="help">https://dos.zone/faq</url>
+  <url type="donation">https://dos.zone/support/</url>
+  <launchable type="desktop-id">dos.zone.Browser.desktop</launchable>
+  <description>
+    <p>
+      To use the Signal desktop app, Signal must first be installed on your phone.
+    </p>
+    <p>
+      Millions of people use Signal every day for free and instantaneous communication 
+      anywhere in the world. Send and receive high-fidelity messages, participate in 
+      HD voice/video calls, and explore a growing set of new features that help you 
+      stay connected. Signal’s advanced privacy-preserving technology is always enabled, 
+      so you can focus on sharing the moments that matter with the people who matter to you. 
+    </p>
+    <p>
+      Signal is an independent 501c3 nonprofit. The complete source code for 
+      the Signal clients and the Signal server is available on GitHub.
+    </p>
+    <p>
+      This flatpak is maintained by the Flathub community, and is not necessarily 
+      endorsed or officially maintained by the upstream developers.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://dos.zone/assets/screenshoots/dos-screen.png</image>
+      <caption>DOS.Zone website in DOS Browser</caption>
+    </screenshot>
+  </screenshots>
+  <provides>
+    <id>Browser.desktop</id>
+  </provides>
+  <update_contact>caiiiycuk@gmail.com</update_contact>
+</component>
