@@ -9,6 +9,8 @@ import { createServer } from "net";
 import { tmpdir } from "os";
 import { debug } from "./config";
 
+const flatpak = existsSync("/app/doszone-backend");
+
 const baseDir = (function detectBaseDir() {
     if (existsSync("src")) {
         return resolve(".");
@@ -40,7 +42,10 @@ const backends = {
     "dosboxX": join(baseDir, "src", "app", "doszone-backend-x.exe"),
 };
 
-if (platform === "darwin") {
+if (flatpak) {
+    backends["dosbox"] = "/app/doszone-backend";
+    backends["dosboxX"] = "/app/doszone-backend-x";
+} else if (platform === "darwin") {
     backends["dosbox"] = join(baseDir, "src", "app", "osx-doszone-backend");
     backends["dosboxX"] = join(baseDir, "src", "app", "osx-doszone-backend-x");
 } else if (platform === "linux") {

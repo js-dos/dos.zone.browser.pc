@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=DOS Browser
+Comment=This app is a browser that have builtin acceleration for DOS games. It can be used to play famous DOS games from DOS.Zone web site. Multiplayer games are supported.
+Icon=zone.dos.Browser
+Exec=run.sh
+Categories=Network;Game;
+Keywords=DOS;Browser;Emulator;Retro;Win9x;Games
