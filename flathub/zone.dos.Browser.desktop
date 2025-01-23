@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=DOS Browser
+Comment=Browser with built-in acceleration for DOS/Win9x game
+Icon=zone.dos.Browser
+Exec=run.sh
+Categories=Network;Game;
+Keywords=DOS;Browser;Emulator;Retro;Win9x;Games
