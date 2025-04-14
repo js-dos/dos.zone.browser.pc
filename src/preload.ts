@@ -12,6 +12,8 @@ contextBridge.exposeInMainWorld("backendHardware", async (backend: "dosbox" | "d
     });
 });
 
+contextBridge.exposeInMainWorld("forceEap", () => true);
+
 ipcRenderer.send("cleanup");
 
 ipcRenderer.on("ws", (e, ws) => {
