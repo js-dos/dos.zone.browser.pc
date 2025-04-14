@@ -38,6 +38,9 @@
   <content_rating type="oars-1.1" />
   <update_contact>caiiiycuk@gmail.com</update_contact>
   <releases>
+    <release version="8.0.6" date="2025-04-14">
+      <description>New sockdrive implementation</description>
+    </release>
     <release version="8.0.5" date="2025-01-21">
       <description>The first release of DOS Browser</description>
     </release>
