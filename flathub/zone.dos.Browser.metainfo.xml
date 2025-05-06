@@ -38,11 +38,20 @@
   <content_rating type="oars-1.1" />
   <update_contact>caiiiycuk@gmail.com</update_contact>
   <releases>
+    <release version="8.0.7" date="2025-05-06">
+      <description>
+        <p>Fixed a bug with mouse cursor in certain games</p>
+      </description>
+    </release>
     <release version="8.0.6" date="2025-04-14">
-      <description>New sockdrive implementation</description>
+      <description>
+        <p>New sockdrive implementation</p>
+      </description>
     </release>
     <release version="8.0.5" date="2025-01-21">
-      <description>The first release of DOS Browser</description>
+      <description>
+        <p>The first release of DOS Browser</p>
+      </description>
     </release>
   </releases>
 </component>
